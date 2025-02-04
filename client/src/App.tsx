@@ -10,19 +10,23 @@ import { Faq } from "./pages/Main/Faq";
 import { Device } from "./pages/Main/Device";
 import { About } from "./pages/Main/About";
 
-type ResponseStatus = "Success" | "Loading" | "Server Error" | null;
+type userData = {
+  user_id: number | string;
+  user_name: string;
+};
+
+type UserDataResponse = userData | "Network Error" | "Loading" | null;
 
 export type UseParking = {
   readonly API_URL: string;
-  responseStatus: ResponseStatus;
-  setResponseStatus: (responseStatus: ResponseStatus) => void;
+  userData: UserDataResponse;
+  setUserData: (userData: UserDataResponse) => void;
 };
 
 export const useParking = create<UseParking>((set) => ({
   API_URL: import.meta.env.VITE_API_URL,
-  responseStatus: "Loading",
-  setResponseStatus: (responseStatus: ResponseStatus) =>
-    set({ responseStatus }),
+  userData: "Loading",
+  setUserData: (data: UserDataResponse) => set({ userData: data }),
 }));
 
 const App = () => {

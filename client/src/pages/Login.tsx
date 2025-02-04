@@ -3,13 +3,16 @@ import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 import axios from "axios";
 import { useParking } from "../App";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 type authInfoType = {
   userName: string;
   password: string;
 };
+
 const Login = () => {
-  const { API_URL } = useParking();
+  const { API_URL, userData, setUserData } = useParking();
+  const navigate: NavigateFunction = useNavigate();
 
   let [authInfo, setAuthInfo] = useState<authInfoType>({
     userName: "",
@@ -25,9 +28,12 @@ const Login = () => {
   const login = async (): Promise<void> => {
     if (authInfo.userName && authInfo.password) {
       await axios
-        .post(`http://localhost:4000/login`, authInfo)
+        .post(`${API_URL}/login`, authInfo)
         .then((res) => {
-          console.log(res.data);
+          if (res.status === 200) {
+            setUserData(res.data);
+            navigate("/");
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -35,9 +41,29 @@ const Login = () => {
     }
   };
 
+  const checkSession = async () => {
+    await axios
+      .get(`${API_URL}/checkSession`)
+      .then((res) => {
+        // if (res.status == 200) {
+        //   if (res.data) setUserData(res.data);
+        //   else setUserData(null);
+        // }
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     document.title = "ავტორიზაცია";
+    checkSession();
   }, []);
+
+  useEffect(() => {
+    if (userData) navigate("/");
+  }, [userData]);
 
   return (
     <div className="h-screen p-[6rem] flex flex-col gap-[10rem] justify-center items-center font-firago">

@@ -39,12 +39,15 @@ export const login = async (req: Request, res: Response) => {
             res.send(userData);
           });
         } else {
-          res.send(false);
+          res.status(404).send({ message: "incorrect password" });
         }
       });
+    } else {
+      res.status(404).send({ message: "user not found" });
     }
   } catch (err) {
     console.log("login error", err);
+    res.status(500).send({ message: "server error" });
   } finally {
     if (conn) conn.release();
   }
@@ -54,9 +57,9 @@ export const logout = async (req: Request, res: Response) => {
   req.session.destroy((err) => {
     if (err) {
       console.log(err);
-      res.send({ message: "Logged out error" });
+      res.status(500).send({ message: "server error" });
     } else {
-      res.send({ message: "Logged out successfully" });
+      res.send({ message: "logged out successfully" });
     }
   });
 };
@@ -66,6 +69,6 @@ export const checkSession = async (req: Request, res: Response) => {
     console.log(req.session.Auth);
     res.send(req.session.Auth);
   } else {
-    res.send({ message: "you are logged out" });
+    res.status(401).send({ message: "you are not authenticated" });
   }
 };
