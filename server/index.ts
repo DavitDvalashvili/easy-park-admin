@@ -3,6 +3,8 @@ import cors from "cors";
 import session from "express-session";
 import { v4 } from "uuid";
 import authRouter from "./routes/auth.route";
+import { sessionStore } from "./db/database";
+import deviceRouter from "./routes/device.route";
 
 const { PORT, API_SERVER } = process.env;
 
@@ -25,6 +27,7 @@ app.use(
     secret: "secret2444666668888888",
     resave: false,
     saveUninitialized: false,
+    store: sessionStore,
     cookie: {
       sameSite: true,
       maxAge: 60 * 60 * 24 * 365 * 1000,
@@ -35,6 +38,7 @@ app.use(
 );
 
 app.use(authRouter);
+app.use(deviceRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

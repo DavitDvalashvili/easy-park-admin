@@ -53,6 +53,15 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+export const checkSession = async (req: Request, res: Response) => {
+  if (req.session.Auth) {
+    console.log(req.session.Auth);
+    res.send(req.session.Auth);
+  } else {
+    res.status(401).send({ message: "you are not authenticated" });
+  }
+};
+
 export const logout = async (req: Request, res: Response) => {
   req.session.destroy((err) => {
     if (err) {
@@ -62,13 +71,4 @@ export const logout = async (req: Request, res: Response) => {
       res.send({ message: "logged out successfully" });
     }
   });
-};
-
-export const checkSession = async (req: Request, res: Response) => {
-  if (req.session.Auth) {
-    console.log(req.session.Auth);
-    res.send(req.session.Auth);
-  } else {
-    res.status(401).send({ message: "you are not authenticated" });
-  }
 };

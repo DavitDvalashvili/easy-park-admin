@@ -28,7 +28,7 @@ const Login = () => {
   const login = async (): Promise<void> => {
     if (authInfo.userName && authInfo.password) {
       await axios
-        .post(`${API_URL}/login`, authInfo)
+        .post(`${API_URL}/login`, authInfo, { withCredentials: true })
         .then((res) => {
           if (res.status === 200) {
             setUserData(res.data);
@@ -43,12 +43,12 @@ const Login = () => {
 
   const checkSession = async () => {
     await axios
-      .get(`${API_URL}/checkSession`)
+      .get(`${API_URL}/checkSession`, { withCredentials: true })
       .then((res) => {
-        // if (res.status == 200) {
-        //   if (res.data) setUserData(res.data);
-        //   else setUserData(null);
-        // }
+        if (res.status == 200) {
+          if (res.data) setUserData(res.data);
+          else setUserData(null);
+        }
         console.log(res.data);
       })
       .catch((err) => {
@@ -62,7 +62,7 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    if (userData) navigate("/");
+    //if (userData) navigate("/");
   }, [userData]);
 
   return (
