@@ -1,12 +1,15 @@
-import { useEffect } from "react";
-import axios from "axios";
-import { useParking } from "../../App";
 import { Outlet } from "react-router-dom";
+import Header from "../../components/Header";
 import { NavigationLayout } from "../../components/NavigationLayout";
+import { useParking, UseParking } from "../../App";
+import { useEffect } from "react";
 
 const Main = () => {
-  const { API_URL } = useParking();
+  const { getDeviceTypes } = useParking();
 
+  useEffect(() => {
+    getDeviceTypes();
+  }, []);
   // const checkSession = async () => {
   //   await axios
   //     .get(`${API_URL}/checkSession`)
@@ -18,17 +21,14 @@ const Main = () => {
   //     });
   // };
 
-  useEffect(() => {
-    //checkSession();
-  }, []);
-
   return (
-    <div className="bg-red-800 w-screen h-screen flex justify-start items-start">
+    <div className="w-screen h-screen flex justify-start items-start">
       <NavigationLayout />
-      <div className="">
+      <div className="w-full">
+        <Header />
         <Outlet />
       </div>
-      //notification
+      {/* <div>notificaion</div> */}
     </div>
   );
 };

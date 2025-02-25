@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 import { create } from "zustand";
 import Login from "./pages/Login";
 import Main from "./pages/Main/Main";
@@ -15,18 +17,45 @@ type userData = {
   user_name: string;
 };
 
+type deviceType = {
+  device_type_id: string | number;
+  device_type: string;
+  name: string;
+};
+
 type UserDataResponse = userData | "Network Error" | "Loading" | null;
+type Language = "Ge" | "En";
 
 export type UseParking = {
   readonly API_URL: string;
   userData: UserDataResponse;
   setUserData: (userData: UserDataResponse) => void;
+  language: Language;
+  toggleLanguage: (Language: Language) => void;
+  deviceTypes: deviceType[] | null;
+  setDeviceTypes: (deviceTypes: deviceType[]) => void;
+  getDeviceTypes: VoidFunction;
 };
 
-export const useParking = create<UseParking>((set) => ({
+export const useParking = create<UseParking>((set, get) => ({
   API_URL: import.meta.env.VITE_API_URL,
   userData: "Loading",
   setUserData: (data: UserDataResponse) => set({ userData: data }),
+  language: "Ge",
+  toggleLanguage: (language: Language) => set({ language }),
+  deviceTypes: null,
+  setDeviceTypes: (deviceTypes: deviceType[]) => set({ deviceTypes }),
+  getDeviceTypes: async () => {
+    const { API_URL, setDeviceTypes } = get();
+    try {
+      const res = await axios.get(`${API_URL}/deviceType`);
+      if (res.status === 200) {
+        setDeviceTypes(res.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  },
 }));
 
 const App = () => {
