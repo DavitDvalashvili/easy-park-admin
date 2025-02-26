@@ -5,6 +5,7 @@ import { v4 } from "uuid";
 import authRouter from "./routes/auth.route";
 import { sessionStore } from "./db/database";
 import deviceRouter from "./routes/device.route";
+import serviceRouter from "./routes/service.route";
 
 const { PORT, API_SERVER } = process.env;
 
@@ -39,6 +40,7 @@ app.use(
 
 app.use(authRouter);
 app.use(deviceRouter);
+app.use(serviceRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

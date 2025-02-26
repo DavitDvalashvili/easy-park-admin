@@ -42,7 +42,7 @@ export const NavigationLayout = () => {
 
       <Link to="/">
         <div
-          className={`${path == "/" ? "bg-primary text-white" : "bg-none text-black"} w-full h-[4.8rem] rounded-custom  flex justify-start items-center gap-[1.2rem] 
+          className={`${path == "/" ? "bg-primary text-white" : "bg-none text-black"} w-full h-[4.8rem] rounded-primary  flex justify-start items-center gap-[1.2rem] 
           text-[1.6rem] font-bold font-feature pl-[4rem] mb-8`}
         >
           <GoHome className="w-[2.4rem] h-[2.4rem]" />
@@ -50,7 +50,7 @@ export const NavigationLayout = () => {
         </div>
       </Link>
       <div
-        className={`${path !== "/" ? "bg-primary text-white" : "bg-none text-black"} w-full h-[4.8rem] rounded-custom flex justify-start items-center
+        className={`${path !== "/" ? "bg-primary text-white" : "bg-none text-black"} w-full h-[4.8rem] rounded-primary flex justify-start items-center
         gap-[1.2rem] text-[1.6rem] font-bold font-feature pl-[4rem] pr-8 cursor-pointer`}
         onClick={() => {
           setShowNavBar(!showNavBar);

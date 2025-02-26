@@ -17,7 +17,7 @@ export const getDeviceType = async (req: Request, res: Response) => {
     res.send(deviceType);
   } catch (err) {
     console.log(err);
-    res.sendStatus(404).send({ message: "devices not found" });
+    res.status(404).send({ message: "devices not found" });
   } finally {
     if (conn) conn.release();
   }

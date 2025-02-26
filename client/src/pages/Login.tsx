@@ -67,7 +67,7 @@ const Login = () => {
 
   return (
     <div className="h-screen p-[6rem] flex flex-col gap-[10rem] justify-center items-center font-firago">
-      <div className="px-[9rem] py-[7.8rem] shadow-customShadow rounded-custom bg-white">
+      <div className="px-[9rem] py-[7.8rem] shadow-customShadow rounded-primary bg-white">
         <h2 className="text-[4.4rem] font-bold text-primary font-feature pb-8 text-center">
           მოგესალმებით
         </h2>
@@ -75,7 +75,7 @@ const Login = () => {
           EASY PARK-ის ადმინ პანელში
         </h5>
         <form className="flex flex-col gap-8">
-          <div className="w-[56rem] h-[6rem] border border-primary rounded-custom px-[2.6rem] py-[1.5rem] flex justify-center items-center">
+          <div className="w-[56rem] h-[6rem] border border-primary rounded-primary px-[2.6rem] py-[1.5rem] flex justify-center items-center">
             <input
               type="text"
               name="userName"
@@ -86,7 +86,7 @@ const Login = () => {
               onChange={handleChangeAuthInfo}
             />
           </div>
-          <div className="w-[56rem] h-[6rem] border border-primary rounded-custom px-[2.6rem] py-[1.5rem] flex justify-center items-center">
+          <div className="w-[56rem] h-[6rem] border border-primary rounded-primary px-[2.6rem] py-[1.5rem] flex justify-center items-center">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -111,7 +111,7 @@ const Login = () => {
           </div>
           <button
             type="button"
-            className="text-[1.8rem] bg-primary rounded-custom text-center font-bold font-feature h-[6rem] w-[56rem] text-white"
+            className="text-[1.8rem] bg-primary rounded-primary text-center font-bold font-feature h-[6rem] w-[56rem] text-white"
             onClick={() => {
               login();
             }}

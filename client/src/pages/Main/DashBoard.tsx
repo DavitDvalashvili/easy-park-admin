@@ -19,27 +19,27 @@ const DashBoard = () => {
         <ul className="pt-[3.9rem] pl-[2.8rem] pr-[8rem] flex flex-col gap-[3rem] font-firago text-black text-[1.6rem] font-feature">
           <Link
             to="/services"
-            className="rounded-[3rem] border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem] 
+            className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem] 
             hover:font-bold hover:bg-primary hover:text-white transition duration-300"
           >
             <li>მომსახურება</li>
           </Link>
           <Link
             to="/benefits"
-            className="rounded-[3rem] border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
+            className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
             hover:font-bold hover:bg-primary hover:text-white transition duration-300"
           >
             <li>ჩვენი უპირატესობები</li>
           </Link>
           <Link
             to="/faq"
-            className="rounded-[3rem] border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
+            className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
             hover:font-bold hover:bg-primary hover:text-white transition duration-300"
           >
             <li>ხშირად დასმული კითხვები</li>
           </Link>
           <div
-            className="rounded-[3rem] border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
+            className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
           hover:font-bold hover:bg-primary hover:text-white transition duration-300"
           >
             <li
@@ -65,7 +65,7 @@ const DashBoard = () => {
           </div>
           <Link
             to="/about"
-            className="rounded-[3rem] border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
+            className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
             hover:font-bold hover:bg-primary hover:text-white transition duration-300"
           >
             <li>ჩვენს შესახებ</li>
