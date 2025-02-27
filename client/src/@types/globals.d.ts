@@ -1,6 +1,7 @@
 type service = {
   description: string;
-  service_id: number | string;
-  service_name: string;
+  serviceId?: number | string;
+  languageId?: number | string;
+  serviceName: string;
   title: string;
 };

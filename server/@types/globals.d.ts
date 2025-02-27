@@ -11,3 +11,10 @@ export type ResponseStatus = {
   message: string;
   insert_id?: number | string;
 };
+
+export type service = {
+  serviceName: string;
+  title: string;
+  description: string;
+  languageId: string | number;
+};

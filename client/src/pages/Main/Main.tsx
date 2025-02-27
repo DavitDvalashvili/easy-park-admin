@@ -22,12 +22,13 @@ const Main = () => {
   // };
 
   return (
-    <div className="w-screen h-screen flex justify-start items-start">
+    <div className="w-screen h-screen flex justify-start items-start max-w-[224rem] mx-auto relative">
       <NavigationLayout />
       <div className="w-full">
         <Header />
         <Outlet />
       </div>
+
       {/* <div>notificaion</div> */}
     </div>
   );
