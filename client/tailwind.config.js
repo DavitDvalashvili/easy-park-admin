@@ -15,6 +15,7 @@ export default {
         errorRed: "#FF0000",
         placeholder: "#898A8A",
         popupBackground: "rgba(0, 0, 0, 0.59)",
+        buttonBackground: "#D82050",
       },
       screens: {
         md: "768px",

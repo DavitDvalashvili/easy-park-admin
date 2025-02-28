@@ -1,6 +1,5 @@
-import { DetailedHTMLProps, HTMLAttributes } from "react";
-
-export type Props = DetailedHTMLProps<
-  HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->;
+export interface Props {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  handleSubmit: () => void;
+  children: React.ReactNode;
+}

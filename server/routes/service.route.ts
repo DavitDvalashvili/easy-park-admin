@@ -4,6 +4,6 @@ import { getServices, updateService } from "../controllers/service.controller";
 const serviceRouter = Router();
 
 serviceRouter.get("/services", getServices);
-serviceRouter.post("/updateService", updateService);
+serviceRouter.post("/updateService/:serviceId", updateService);
 
 export default serviceRouter;

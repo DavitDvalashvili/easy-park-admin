@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import { createConnection } from "../db/database";
 import { service, ResponseStatus } from "../@types/globals";
 
@@ -31,42 +31,49 @@ export const getServices = async (req: Request, res: Response) => {
 export const updateService = async (req: Request, res: Response) => {
   let conn;
 
-  const serviceId = req.query.service_id as string | number;
-  const { serviceName, title, description, languageId } = <service>req.query;
+  const serviceId = req.params.serviceId as string | number;
+  const { serviceName, title, description } = req.body as service;
+
+  if (!serviceId) {
+    res.send({ status: "update_error", message: "Invalid service ID" });
+    return;
+  }
 
   try {
     conn = await createConnection();
-    let response: ResponseStatus;
 
     let query = `UPDATE services s
-    JOIN language l ON l.language_id = s.language_id
     SET 
         s.service_name = ?, 
         s.title = ?, 
         s.description = ?
     WHERE 
-        l.language = ? 
-        AND s.service_id = ?`;
+        s.service_id = ?`;
 
-    await conn
-      .query(query, [serviceName, title, description, languageId, serviceId])
-      .then((res) => {
-        response = {
-          status: "updated",
-          message: "სერვისი წარმატებით განახლდა",
-        };
-        res.send(response);
-      })
-      .catch((err) => {
-        console.log(err);
-        response = {
-          status: "update_error",
-          message: "სერვისი ვერ განახლდა",
-        };
-        res.send(response);
+    const result: any = await conn.query(query, [
+      serviceName,
+      title,
+      description,
+      serviceId,
+    ]);
+
+    if (result.affectedRows > 0) {
+      res.send({
+        status: "updated",
+        message: "სერვისი წარმატებით განახლდა",
       });
+    } else {
+      res.send({
+        status: "update_error",
+        message: "სერვისი ვერ განახლდა",
+      });
+    }
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    res.send({
+      status: "update_error",
+      message: "სერვისი ვერ განახლდა",
+    });
   } finally {
     if (conn) conn.release();
   }

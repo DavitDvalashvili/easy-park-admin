@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useState } from "react";
 import axios from "axios";
 import { create } from "zustand";
 import Login from "./pages/Login";
@@ -30,6 +29,8 @@ export type UseParking = {
   readonly API_URL: string;
   userData: UserDataResponse;
   setUserData: (userData: UserDataResponse) => void;
+  response: ResponseStatus | null;
+  setResponse: (response: ResponseStatus | null) => void;
   language: Language;
   toggleLanguage: (Language: Language) => void;
   deviceTypes: deviceType[] | null;
@@ -41,6 +42,8 @@ export const useParking = create<UseParking>((set, get) => ({
   API_URL: import.meta.env.VITE_API_URL,
   userData: "Loading",
   setUserData: (data: UserDataResponse) => set({ userData: data }),
+  response: null,
+  setResponse: (response: ResponseStatus | null) => set({ response }),
   language: "Ge",
   toggleLanguage: (language: Language) => set({ language }),
   deviceTypes: null,

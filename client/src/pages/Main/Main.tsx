@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Header from "../../components/Header";
 import { NavigationLayout } from "../../components/NavigationLayout";
-import { useParking, UseParking } from "../../App";
+import { useParking } from "../../App";
 import { useEffect } from "react";
+import { Notification } from "../../components/Notification";
 
 const Main = () => {
-  const { getDeviceTypes } = useParking();
+  const { getDeviceTypes, response } = useParking();
 
   useEffect(() => {
     getDeviceTypes();
@@ -28,8 +29,7 @@ const Main = () => {
         <Header />
         <Outlet />
       </div>
-
-      {/* <div>notificaion</div> */}
+      {response && <Notification />}
     </div>
   );
 };

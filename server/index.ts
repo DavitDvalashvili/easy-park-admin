@@ -25,7 +25,7 @@ app.use(
   session({
     genid: () => v4(),
     name: "user",
-    secret: "secret2444666668888888",
+    secret: "secret2468",
     resave: false,
     saveUninitialized: false,
     store: sessionStore,

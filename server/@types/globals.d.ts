@@ -17,4 +17,5 @@ export type service = {
   title: string;
   description: string;
   languageId: string | number;
+  serviceId: string | number;
 };
