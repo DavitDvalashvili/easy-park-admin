@@ -37,25 +37,27 @@ export const Services = () => {
   }, [language]);
 
   const updateService = async () => {
-    await axios
-      .post(`${API_URL}/updateService/${service.serviceId}`, service)
-      .then((res) => {
-        if (res.data.status == "updated") {
-          setServices(
-            [
-              ...services.filter(
-                (item) => item.serviceId !== service.serviceId
-              ),
-              service,
-            ].sort((a, b) => Number(a.serviceId) - Number(b.serviceId))
-          );
-        }
-        setShowModal(!showModal);
-        setResponse(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (service.description && service.serviceName && service.title) {
+      await axios
+        .post(`${API_URL}/updateService/${service.serviceId}`, service)
+        .then((res) => {
+          if (res.data.status == "updated") {
+            setServices(
+              [
+                ...services.filter(
+                  (item) => item.serviceId !== service.serviceId
+                ),
+                service,
+              ].sort((a, b) => Number(a.serviceId) - Number(b.serviceId))
+            );
+          }
+          setShowModal(!showModal);
+          setResponse(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -101,6 +103,7 @@ export const Services = () => {
           <div className="w-[34.3rem] mt-2 mb-[2rem]">
             <form className="flex flex-col">
               <input
+                placeholder="აკრიფეთ ტექსტი..."
                 type="text"
                 name="serviceName"
                 value={service.serviceName}
@@ -110,6 +113,7 @@ export const Services = () => {
                 }}
               />
               <input
+                placeholder="აკრიფეთ ტექსტი..."
                 type="text"
                 name="title"
                 value={service.title}
@@ -119,6 +123,7 @@ export const Services = () => {
                 }}
               />
               <textarea
+                placeholder="აკრიფეთ ტექსტი..."
                 name="description"
                 value={service.description}
                 className="text-[1.3rem] font-normal min-h-[15.6rem] focus:outline-none resize-none border-[0.05rem] border-primary rounded-primary p-[0.8rem]"

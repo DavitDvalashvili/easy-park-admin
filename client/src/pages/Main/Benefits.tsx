@@ -37,44 +37,47 @@ export const Benefits = () => {
   }, [language]);
 
   const updateBenefit = async () => {
-    await axios
-      .post(`${API_URL}/updateBenefit/${benefit.benefitId}`, benefit)
-      .then((res) => {
-        if (res.data.status == "updated") {
-          setBenefits(
-            [
-              ...benefits.filter(
-                (item) => item.benefitId !== benefit.benefitId
-              ),
-              benefit,
-            ].sort((a, b) => Number(a.benefitId) - Number(b.benefitId))
-          );
-        }
-        setShowModal(!showModal);
-        setResponse(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (benefit.benefit) {
+      await axios
+        .post(`${API_URL}/updateBenefit/${benefit.benefitId}`, benefit)
+        .then((res) => {
+          if (res.data.status == "updated") {
+            setBenefits(
+              [
+                ...benefits.filter(
+                  (item) => item.benefitId !== benefit.benefitId
+                ),
+                benefit,
+              ].sort((a, b) => Number(a.benefitId) - Number(b.benefitId))
+            );
+          }
+          setShowModal(!showModal);
+          setResponse(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const addBenefit = async () => {
-    await axios
-      .post(`${API_URL}/addBenefit?lan=${language}`, benefit)
-      .then((res) => {
-        if (res.data.status == "inserted") {
-          console.log(res.data);
-          setBenefits([
-            ...benefits,
-            { ...benefit, benefitId: res.data.insert_id },
-          ]);
-        }
-        setShowAddModal(!showAddModal);
-        setResponse(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (benefit.benefit) {
+      await axios
+        .post(`${API_URL}/addBenefit?lan=${language}`, benefit)
+        .then((res) => {
+          if (res.data.status == "inserted") {
+            setBenefits([
+              ...benefits,
+              { ...benefit, benefitId: res.data.insert_id },
+            ]);
+          }
+          setShowAddModal(!showAddModal);
+          setResponse(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
@@ -129,6 +132,7 @@ export const Benefits = () => {
           <div className="w-[34.3rem] mt-2 mb-[2rem]">
             <form className="flex flex-col">
               <textarea
+                placeholder="აკრიფეთ ტექსტი..."
                 name="benefit"
                 value={benefit.benefit}
                 className="text-[1.3rem] font-normal min-h-[14.6rem] focus:outline-none resize-none border-[0.05rem] border-primary rounded-primary p-[0.8rem]"
