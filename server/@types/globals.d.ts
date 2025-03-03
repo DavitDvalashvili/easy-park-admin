@@ -32,3 +32,11 @@ export type faq = {
   answer: string;
   languageId?: string | number;
 };
+
+export type about = {
+  Id?: string | number;
+  title: string;
+  subtitle: string;
+  description: string;
+  languageId?: string | number;
+};

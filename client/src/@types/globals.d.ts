@@ -32,3 +32,11 @@ type faq = {
   answer: string;
   languageId?: string | number;
 };
+
+type about = {
+  Id?: string | number;
+  title: string;
+  subtitle: string;
+  description: string;
+  languageId?: string | number;
+};

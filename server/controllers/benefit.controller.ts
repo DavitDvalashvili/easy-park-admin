@@ -5,7 +5,7 @@ import { benefit, ResponseStatus } from "../@types/globals";
 export const getBenefits = async (req: Request, res: Response) => {
   let conn;
 
-  const lan = req.query.lan as string | "";
+  const lan = req.query.lan as string | "Ge";
 
   try {
     conn = await createConnection();

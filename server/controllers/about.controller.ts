@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { createConnection } from "../db/database";
-import { service, ResponseStatus } from "../@types/globals";
+import { about, ResponseStatus } from "../@types/globals";
 
-export const getServices = async (req: Request, res: Response) => {
+export const getAbout = async (req: Request, res: Response) => {
   let conn;
 
   const lan = req.query.lan as string | "Ge";
@@ -10,53 +10,50 @@ export const getServices = async (req: Request, res: Response) => {
   try {
     conn = await createConnection();
 
-    const query = `   
-      SELECT s.service_id AS serviceId, s.service_name AS serviceName, s.title, s.description
-      FROM services s
-      JOIN  languages l ON s.language_id = l.language_id
-      WHERE l.language = ?
-      LIMIT 6`;
+    const query = `SELECT a.id as Id, a.title, a.subtitle, a.description
+      FROM about a
+      JOIN  languages l ON a.language_id = l.language_id
+      WHERE l.language = ?`;
 
-    const services: service[] = await conn.query(query, [lan]);
+    const [about] = await conn.query(query, [lan]);
 
-    res.send(services);
+    res.send(about);
   } catch (err) {
     console.log(err);
-    res.status(404).send({ message: "devices not found" });
   } finally {
     if (conn) conn.release();
   }
 };
 
-export const updateService = async (req: Request, res: Response) => {
+export const updateAbout = async (req: Request, res: Response) => {
   let conn;
 
-  const serviceId = req.params.serviceId as string | number;
-  const { serviceName, title, description } = req.body as service;
+  const Id = req.params.Id as string | number;
+  const { title, subtitle, description } = req.body as about;
 
   let response: ResponseStatus;
 
-  if (!serviceId) {
-    res.send({ status: "update_error", message: "Invalid service ID" });
+  if (!Id) {
+    res.send({ status: "update_error", message: "Invalid ID" });
     return;
   }
 
   try {
     conn = await createConnection();
 
-    let query = `UPDATE services s
+    let query = `UPDATE about a
     SET 
-        s.service_name = ?, 
-        s.title = ?, 
-        s.description = ?
+        a.title = ?,
+        a.subtitle = ?,
+        a.description = ?
     WHERE 
-        s.service_id = ?`;
+        a.id = ?`;
 
     const result: any = await conn.query(query, [
-      serviceName,
       title,
+      subtitle,
       description,
-      serviceId,
+      Id,
     ]);
 
     if (result.affectedRows > 0) {
