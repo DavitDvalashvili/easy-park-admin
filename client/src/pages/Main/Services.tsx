@@ -59,7 +59,7 @@ export const Services = () => {
   };
 
   return (
-    <div className="pt-[3.3rem] pl-[3rem] font-firago">
+    <div className="p-[3rem] font-firago">
       <div className="font-normal text-[1.6rem] font-feature flex justify-left item-center gap-[1.3rem] mb-[4.1rem]">
         <span>ტექსტის ცვლილება/წაშლა</span>
         <LuPencilLine className="w-[1.9rem] h-[1.9rem]" />
@@ -68,10 +68,10 @@ export const Services = () => {
         {services.map((serviceItem, index) => (
           <div
             key={index}
-            className="w-[34.3rem] h-[30.5rem] border border-primary rounded-primary p-4 flex flex-col justify-start"
+            className="w-[34.3rem] h-[29rem] border border-primary rounded-primary p-4 flex flex-col justify-start"
           >
-            <span className="text-[2rem] uppercase font-bold">
-              N {serviceItem.serviceId}
+            <span className="text-[2rem] uppercase font-bold leading-[2rem]">
+              N {index + 1}
             </span>
             <h3 className="pt-[1.1rem] text-[1.4rem] font-bold">
               {serviceItem.serviceName}
@@ -88,7 +88,8 @@ export const Services = () => {
                 setShowModal(!showModal);
               }}
               className="mt-auto w-[13.2rem] h-[3.5rem] text-[1.3rem] font-bold text-primary border
-             border-primary rounded-secondary mx-auto flex items-center justify-center"
+             border-primary rounded-secondary mx-auto flex items-center justify-center hover:bg-primary
+              hover:text-white  transition duration-300"
             >
               რედაქტირება
             </button>
@@ -97,16 +98,13 @@ export const Services = () => {
       </div>
       {showModal && (
         <Modal setShowModal={setShowModal} handleSubmit={updateService}>
-          <div className="w-[34.3rem] h-[30.5rem]">
-            <span className="text-[2rem] uppercase font-bold">
-              N {service.serviceId}
-            </span>
+          <div className="w-[34.3rem] mt-2 mb-[2rem]">
             <form className="flex flex-col">
               <input
                 type="text"
                 name="serviceName"
                 value={service.serviceName}
-                className="mt-[1.1rem] text-[1.4rem] font-bold focus:outline-none border-[0.05rem] border-primary rounded-primary p-[0.8rem]"
+                className=" text-[1.4rem] font-bold focus:outline-none border-[0.05rem] border-primary rounded-primary p-[0.8rem]"
                 onChange={(e) => {
                   setService({ ...service, serviceName: e.target.value });
                 }}

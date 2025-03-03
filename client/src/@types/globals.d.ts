@@ -19,3 +19,9 @@ type service = {
   serviceName: string;
   title: string;
 };
+
+type benefit = {
+  benefit: string;
+  benefitId?: string | number;
+  languageId?: string | number;
+};

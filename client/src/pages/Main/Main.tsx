@@ -23,9 +23,9 @@ const Main = () => {
   // };
 
   return (
-    <div className="w-screen h-screen flex justify-start items-start max-w-[224rem] mx-auto relative">
+    <div className="w-screen h-screen flex justify-start items-start max-w-[224rem] mx-auto relative ">
       <NavigationLayout />
-      <div className="w-full">
+      <div className="w-full h-screen  overflow-y-scroll">
         <Header />
         <Outlet />
       </div>
