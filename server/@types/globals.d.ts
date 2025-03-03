@@ -25,3 +25,10 @@ export type benefit = {
   benefitId?: string | number;
   languageId?: string | number;
 };
+
+export type faq = {
+  faqId?: string | number;
+  question: string;
+  answer: string;
+  languageId?: string | number;
+};

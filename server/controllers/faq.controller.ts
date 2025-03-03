@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { createConnection } from "../db/database";
-import { benefit, ResponseStatus } from "../@types/globals";
+import { faq, ResponseStatus } from "../@types/globals";
 
-export const getBenefits = async (req: Request, res: Response) => {
+export const getFaqs = async (req: Request, res: Response) => {
   let conn;
 
   const lan = req.query.lan as string | "";
@@ -10,14 +10,14 @@ export const getBenefits = async (req: Request, res: Response) => {
   try {
     conn = await createConnection();
 
-    const query = `SELECT b.benefit_id AS benefitId, b.benefit
-      FROM benefits b
-      JOIN  languages l ON b.language_id = l.language_id
+    let query = `SELECT f.faq_id AS faqId, f.question, f.answer
+      FROM faq f
+      JOIN  languages l ON f.language_id = l.language_id
       WHERE l.language = ?`;
 
-    let benefits: benefit[] = await conn.query(query, [lan]);
+    const faqs: faq[] = await conn.query(query, [lan]);
 
-    res.send(benefits);
+    res.send(faqs);
   } catch (err) {
     console.log(err);
   } finally {
@@ -25,29 +25,30 @@ export const getBenefits = async (req: Request, res: Response) => {
   }
 };
 
-export const updateBenefit = async (req: Request, res: Response) => {
+export const updateFaq = async (req: Request, res: Response) => {
   let conn;
 
-  const benefitId = req.params.benefitId as string | number;
-  const { benefit } = req.body as benefit;
+  const faqId = req.params.faqId as string | number;
+  const { question, answer } = req.body as faq;
 
   let response: ResponseStatus;
 
-  if (!benefitId) {
-    res.send({ status: "update_error", message: "Invalid benefit ID" });
+  if (!faqId) {
+    res.send({ status: "update_error", message: "Invalid FAQ ID" });
     return;
   }
 
   try {
     conn = await createConnection();
 
-    let query = `UPDATE benefits b
+    let query = `UPDATE faq f
     SET 
-        b.benefit = ?
+        f.question = ?,
+        f.answer = ?
     WHERE 
-        b.benefit_id = ?`;
+        f.faq_id = ?`;
 
-    const result: any = await conn.query(query, [benefit, benefitId]);
+    const result: any = await conn.query(query, [question, answer, faqId]);
 
     if (result.affectedRows > 0) {
       response = {
@@ -74,11 +75,11 @@ export const updateBenefit = async (req: Request, res: Response) => {
   }
 };
 
-export const addBenefit = async (req: Request, res: Response) => {
+export const addFaq = async (req: Request, res: Response) => {
   let conn;
 
   const lan = req.query.lan as string | "";
-  const { benefit } = req.body as benefit;
+  const { answer, question } = req.body as faq;
 
   let response: ResponseStatus;
 
@@ -90,12 +91,13 @@ export const addBenefit = async (req: Request, res: Response) => {
       [lan]
     );
 
-    let query = `INSERT INTO benefits (benefit, language_id)
-    VALUE (?, ?)
+    let query = `INSERT INTO faq (question, answer, language_id)
+    VALUE (?, ?, ?)
     `;
 
     const result: any = await conn.query(query, [
-      benefit,
+      question,
+      answer,
       language.language_id,
     ]);
 

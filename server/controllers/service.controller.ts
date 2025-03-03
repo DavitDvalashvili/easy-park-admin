@@ -34,6 +34,8 @@ export const updateService = async (req: Request, res: Response) => {
   const serviceId = req.params.serviceId as string | number;
   const { serviceName, title, description } = req.body as service;
 
+  let response: ResponseStatus;
+
   if (!serviceId) {
     res.send({ status: "update_error", message: "Invalid service ID" });
     return;
@@ -58,22 +60,25 @@ export const updateService = async (req: Request, res: Response) => {
     ]);
 
     if (result.affectedRows > 0) {
-      res.send({
+      response = {
         status: "updated",
         message: "ინფორმაცია წარმატებით განახლდა",
-      });
+      };
+      res.send(response);
     } else {
-      res.send({
+      response = {
         status: "update_error",
         message: "ინფორმაცია ვერ განახლდა",
-      });
+      };
+      res.send(response);
     }
   } catch (err) {
     console.error(err);
-    res.send({
+    response = {
       status: "update_error",
       message: "ინფორმაცია ვერ განახლდა",
-    });
+    };
+    res.send(response);
   } finally {
     if (conn) conn.release();
   }
