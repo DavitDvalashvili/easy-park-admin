@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParking } from "../../App";
 import { Modal } from "../../components/Modal";
 import { LuPencilLine } from "react-icons/lu";
-//import { GoPlus } from "react-icons/go";
+import { GoPlus } from "react-icons/go";
 
 const defaultAbout = {
   Id: "",
@@ -15,10 +15,10 @@ const defaultAbout = {
 
 export const About = () => {
   const [showModal, setShowModal] = useState(false);
-  //const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [about, setAbout] = useState(defaultAbout);
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [paragraphs, setParagraphs] = useState<string[]>([]);
-  //const [newParagraph, setNewParagraph] = useState<string>("");
+  const [newParagraph, setNewParagraph] = useState<string>("");
 
   // Temporary states for modal form
   const [tempAbout, setTempAbout] = useState(defaultAbout);
@@ -30,8 +30,10 @@ export const About = () => {
     try {
       const res = await axios.get(`${API_URL}/about?lan=${language}`);
       if (res.status === 200) {
+        console.log(res.data);
         setAbout(res.data);
-        setParagraphs(JSON.parse(res.data.description || "[]"));
+        setParagraphs(JSON.parse(res.data.description));
+        console.log(JSON.parse(res.data.description));
       }
     } catch (error) {
       console.error(error);
@@ -46,7 +48,7 @@ export const About = () => {
     try {
       const updatedData = {
         ...tempAbout,
-        description: JSON.stringify(paragraphs.push),
+        description: JSON.stringify(tempParagraphs.filter((a) => a !== "")),
       };
 
       const res = await axios.post(
@@ -54,9 +56,9 @@ export const About = () => {
         updatedData
       );
 
-      if (res.data.status === "updated") {
+      if (res.status === 200) {
         setAbout(updatedData);
-        setParagraphs(tempParagraphs);
+        setParagraphs(tempParagraphs.filter((a) => a !== ""));
         setShowModal(false);
         setResponse(res.data);
       }
@@ -65,31 +67,37 @@ export const About = () => {
     }
   };
 
-  // const addAbout = async () => {
-  //   try {
-  //     const updatedData = {
-  //       ...about,
-  //       description: JSON.stringify(about.description),
-  //     };
+  const addAbout = async () => {
+    try {
+      const updatedData = {
+        ...about,
+        description: JSON.stringify([
+          ...JSON.parse(about.description),
+          newParagraph,
+        ]),
+      };
 
-  //     console.log(about);
+      if (newParagraph) {
+        const res = await axios.post(
+          `${API_URL}/updateAbout/${about.Id}`,
+          updatedData
+        );
 
-  //     const res = await axios.post(
-  //       `${API_URL}/updateAbout/${about.Id}`,
-  //       updatedData
-  //     );
+        if (res.data.status === "updated") {
+          setAbout(updatedData);
+          setParagraphs([...JSON.parse(about.description), newParagraph]);
+          setShowAddModal(false);
+          setResponse(res.data);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  //     if (res.data.status === "updated") {
-  //       setAbout(updatedData);
-  //       setParagraphs(tempParagraphs);
-  //       setShowModal(false);
-  //       setResponse(res.data);
-  //       setTempParagraphs([]);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  useEffect(() => {
+    setNewParagraph("");
+  }, [showAddModal]);
 
   return (
     <div className="p-[3rem] pr-[10.8rem] font-firago">
@@ -128,19 +136,18 @@ export const About = () => {
           </button>
         </div>
       </div>
-      {/* <div className=" w-[17.4rem] pt-[3rem]">
+      <div className=" w-[17.4rem] pt-[3rem]">
         <div
           className=" h-[18.1rem] border border-primary rounded-primary text-primary flex 
                 justify-center items-center flex-col gap-[0.4rem] cursor-pointer"
           onClick={() => {
-            setTempParagraphs([...paragraphs]);
-            setShowAddModal(true);
+            setShowAddModal(!showAddModal);
           }}
         >
           <GoPlus className="w-[3.2rem] h-[3.2rem]" />
           <span className="text-[1.2rem] font-bold">დაამატე ტექსტი</span>
         </div>
-      </div> */}
+      </div>
       {showModal && (
         <Modal setShowModal={setShowModal} handleSubmit={updateAbout}>
           <div className="w-[99.7rem] mt-2 mb-[2rem]">
@@ -185,13 +192,13 @@ export const About = () => {
           </div>
         </Modal>
       )}
-      {/* {showAddModal && (
+      {showAddModal && (
         <Modal setShowModal={setShowAddModal} handleSubmit={addAbout}>
           <div className="w-[99.7rem] mt-2 mb-[2rem]">
             <form className="flex flex-col">
               <textarea
                 placeholder="აკრიფეთ ტექსტი..."
-                name="description"
+                name="benefit"
                 value={newParagraph}
                 className="text-[1.3rem] font-normal min-h-[14.6rem] focus:outline-none resize-none border-[0.05rem] border-primary rounded-primary p-[0.8rem]"
                 onChange={(e) => {
@@ -201,7 +208,7 @@ export const About = () => {
             </form>
           </div>
         </Modal>
-      )} */}
+      )}
     </div>
   );
 };
