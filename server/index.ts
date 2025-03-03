@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.route";
 import { sessionStore } from "./db/database";
 import deviceRouter from "./routes/device.route";
 import serviceRouter from "./routes/service.route";
+import benefitRouter from "./routes/benefit.route";
 
 const { PORT, API_SERVER } = process.env;
 
@@ -41,6 +42,7 @@ app.use(
 app.use(authRouter);
 app.use(deviceRouter);
 app.use(serviceRouter);
+app.use(benefitRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

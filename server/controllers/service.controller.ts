@@ -17,7 +17,7 @@ export const getServices = async (req: Request, res: Response) => {
       WHERE l.language = ?
       LIMIT 6`;
 
-    const services = await conn.query(query, [lan]);
+    const services: service[] = await conn.query(query, [lan]);
 
     res.send(services);
   } catch (err) {
@@ -60,19 +60,19 @@ export const updateService = async (req: Request, res: Response) => {
     if (result.affectedRows > 0) {
       res.send({
         status: "updated",
-        message: "სერვისი წარმატებით განახლდა",
+        message: "ინფორმაცია წარმატებით განახლდა",
       });
     } else {
       res.send({
         status: "update_error",
-        message: "სერვისი ვერ განახლდა",
+        message: "ინფორმაცია ვერ განახლდა",
       });
     }
   } catch (err) {
     console.error(err);
     res.send({
       status: "update_error",
-      message: "სერვისი ვერ განახლდა",
+      message: "ინფორმაცია ვერ განახლდა",
     });
   } finally {
     if (conn) conn.release();

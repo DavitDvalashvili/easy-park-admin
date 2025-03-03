@@ -16,6 +16,12 @@ export type service = {
   serviceName: string;
   title: string;
   description: string;
-  languageId: string | number;
-  serviceId: string | number;
+  languageId?: string | number;
+  serviceId?: string | number;
+};
+
+export type benefit = {
+  benefit: string;
+  benefitId?: string | number;
+  languageId?: string | number;
 };

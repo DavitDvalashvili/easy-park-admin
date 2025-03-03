@@ -10,7 +10,7 @@ export const getDeviceType = async (req: Request, res: Response) => {
       SELECT dt.device_type_id, dt.device_type, d.name
       FROM device_type dt
       JOIN  devices d ON dt.device_type_id = d.device_type_id
-      GROUP BY dt.device_type_id
+      WHERE d.language_id = 0
         `;
     const deviceType = await conn.query(query);
 
