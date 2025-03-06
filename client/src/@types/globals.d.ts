@@ -40,3 +40,27 @@ type about = {
   description: string;
   languageId?: string | number;
 };
+
+type device = {
+  deviceId?: string | number;
+  name: string;
+  description: string;
+  languageId?: string | number;
+};
+
+type feature = {
+  featureId?: string | number;
+  feature: string;
+  languageId?: string | number;
+};
+
+type image = {
+  imageId: string | number;
+  imageUrl: string;
+};
+
+type deviceData = {
+  devices: device[];
+  features: feature[];
+  images: image[];
+};
