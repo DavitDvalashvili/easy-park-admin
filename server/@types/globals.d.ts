@@ -40,3 +40,27 @@ export type about = {
   description: string;
   languageId?: string | number;
 };
+
+export type device = {
+  deviceId?: string | number;
+  name: string;
+  description: string;
+  languageId?: string | number;
+};
+
+export type feature = {
+  featureId?: string | number;
+  feature: string;
+  languageId?: string | number;
+};
+
+export type image = {
+  imageId: string | number;
+  imageUrl: string;
+};
+
+export type deviceData = {
+  devices: device[];
+  features: feature[];
+  images: image[];
+};
