@@ -181,7 +181,8 @@ export const updateFeature = async (req: Request, res: Response) => {
 export const addFeature = async (req: Request, res: Response) => {
   let conn;
 
-  const lan = req.query.lan as string | "";
+  const deviceTypeId = req.query.deviceTypeId as string | number;
+  const lan = req.query.lan as string | number;
   const { feature } = req.body as feature;
 
   let response: ResponseStatus;
@@ -194,13 +195,14 @@ export const addFeature = async (req: Request, res: Response) => {
       [lan]
     );
 
-    let query = `INSERT INTO features (feature, language_id)
-    VALUE (?, ?)
+    let query = `INSERT INTO features (feature, language_id, device_type_id)
+    VALUE (?, ?, ?)
     `;
 
     const result: any = await conn.query(query, [
       feature,
       language.language_id,
+      deviceTypeId,
     ]);
 
     if (result.affectedRows > 0) {
@@ -228,3 +230,92 @@ export const addFeature = async (req: Request, res: Response) => {
     if (conn) conn.release();
   }
 };
+
+export const deleteFeature = async (req: Request, res: Response) => {
+  let conn;
+  const { featureId } = req.params;
+
+  try {
+    conn = await createConnection();
+
+    // Execute the delete query
+    const result = await conn.query(
+      `DELETE FROM features f 
+       WHERE f.feature_id = ?`,
+      [featureId]
+    );
+
+    if (result.affectedRows > 0) {
+      res.send({
+        status: "deleted",
+        message: "ინფორმაცია წარმატებით წაიშალა",
+      });
+    } else {
+      res.send({
+        status: "delete_error",
+        message: "ინფორმაცია ვერ წაიშალა",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      status: "delete_error",
+      message: "დაფიქსირდა შეცდომა სერვერზე",
+    });
+  } finally {
+    if (conn) conn.end();
+  }
+};
+
+// export const addImage = async (req: Request, res: Response) => {
+//   let conn;
+
+//   // const deviceTypeId = req.query.deviceTypeId as string | number;
+//   // const lan = req.query.lan as string | number;
+//   // const { feature } = req.body as feature;
+
+//   let response: ResponseStatus;
+
+//   try {
+//     conn = await createConnection();
+
+//     const [language] = await conn.query(
+//       `SELECT language_id FROM languages WHERE language = ?`,
+//       [lan]
+//     );
+
+//     let query = `INSERT INTO features (feature, language_id, device_type_id)
+//     VALUE (?, ?, ?)
+//     `;
+
+//     const result: any = await conn.query(query, [
+//       feature,
+//       language.language_id,
+//       deviceTypeId,
+//     ]);
+
+//     if (result.affectedRows > 0) {
+//       response = {
+//         status: "inserted",
+//         message: "ინფორმაცია წარმატებით დაემატა",
+//         insert_id: Number(result.insertId),
+//       };
+//       res.send(response);
+//     } else {
+//       response = {
+//         status: "insert_error",
+//         message: "ინფორმაცია ვერ დაემატა",
+//       };
+//       res.send(response);
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     response = {
+//       status: "insert_error",
+//       message: "ინფორმაცია ვერ დაემატა",
+//     };
+//     res.send(response);
+//   } finally {
+//     if (conn) conn.release();
+//   }
+// };

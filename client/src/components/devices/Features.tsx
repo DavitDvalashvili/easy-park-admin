@@ -3,6 +3,7 @@ import { GoPlus } from "react-icons/go";
 import { Modal } from "../Modal";
 import axios from "axios";
 import { useParking } from "../../App";
+import { useParams } from "react-router-dom";
 
 type features = {
   Features: feature[] | undefined;
@@ -19,6 +20,9 @@ const Features = ({ Features }: features) => {
   const [feature, setFeature] = useState<feature>(defaultFeature);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+
+  const { id } = useParams();
 
   const { API_URL, setResponse, language } = useParking();
 
@@ -57,7 +61,10 @@ const Features = ({ Features }: features) => {
   const addFeature = async () => {
     if (feature.feature) {
       await axios
-        .post(`${API_URL}/addFeature?lan=${language}`, feature)
+        .post(
+          `${API_URL}/addFeature?lan=${language}&deviceTypeId=${id}`,
+          feature
+        )
         .then((res) => {
           if (res.data.status == "inserted") {
             setFeatures([
@@ -72,6 +79,24 @@ const Features = ({ Features }: features) => {
           console.log(err);
         });
     }
+  };
+
+  const deleteFeature = async () => {
+    await axios
+      .delete(`${API_URL}/deleteFeature/${feature.featureId}`)
+      .then((res) => {
+        if (res.data.status == "deleted") {
+          setFeatures([
+            ...features.filter((f) => f.featureId !== feature.featureId),
+          ]);
+        }
+        setShowDeleteModal(!showDeleteModal);
+        setResponse(res.data);
+        setFeature(defaultFeature);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -96,6 +121,17 @@ const Features = ({ Features }: features) => {
                     {feature.feature}
                   </p>
                 </div>
+                <button
+                  onClick={() => {
+                    setFeature(feature);
+                    setShowDeleteModal(!showDeleteModal);
+                  }}
+                  className="w-[12.2rem] h-[3rem] text-[1.2rem] font-bold text-errorRed border
+                  border-errorRed rounded-primary mx-auto flex items-center justify-center 
+                   hover:bg-errorRed hover:text-white  transition duration-300 mr-4"
+                >
+                  წაშლა
+                </button>
                 <button
                   onClick={() => {
                     setFeature(feature);
@@ -154,6 +190,17 @@ const Features = ({ Features }: features) => {
                   setFeature({ ...feature, feature: e.target.value });
                 }}
               />
+            </form>
+          </div>
+        </Modal>
+      )}
+      {showDeleteModal && (
+        <Modal setShowModal={setShowDeleteModal} handleSubmit={deleteFeature}>
+          <div className="w-[34.3rem] mt-2 mb-[2rem]">
+            <form className="flex flex-col">
+              <div className="text-[1.3rem] font-medium  border-[0.05rem] border-primary rounded-primary p-[0.8rem] text-center ">
+                ნამდვილად გსურთ მახასიათებლის წაშლა?
+              </div>
             </form>
           </div>
         </Modal>
