@@ -51,11 +51,6 @@ const ImagesBox = ({ Images }: ImagesProps) => {
           console.log(err);
         });
     }
-    // if (previewUrl) {
-    //   setImages((prev) => [...prev, { imageUrl: previewUrl }]);
-    //   setPreviewUrl(null);
-    //   setShowModal(false);
-    // }
   };
 
   useEffect(() => {
@@ -92,25 +87,24 @@ const ImagesBox = ({ Images }: ImagesProps) => {
             </button>
           </div>
         ))}
-      </div>
-
-      {/* Add New Image */}
-      <div className="w-[17.4rem] pt-12">
-        <div
-          className="h-[18.1rem] border border-primary rounded-primary text-primary flex justify-center items-center flex-col gap-2 cursor-pointer"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <GoPlus className="w-8 h-8" />
-          <span className="text-[1.2rem] font-bold">დაამატე ფოტო</span>
+        <div className="w-[28.5rem] h-[23.5rem] ">
+          <div className="w-[17.4rem] pt-12">
+            <div
+              className="h-[18.1rem] border border-primary rounded-primary text-primary flex justify-center items-center flex-col gap-2 cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <GoPlus className="w-8 h-8" />
+              <span className="text-[1.2rem] font-bold">დაამატე ფოტო</span>
+            </div>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </div>
         </div>
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-        />
       </div>
-
       {/* Modal Preview Before Upload */}
       {showModal && previewUrl && (
         <Modal setShowModal={setShowModal} handleSubmit={addImage}>

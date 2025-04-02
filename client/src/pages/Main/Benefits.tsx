@@ -85,12 +85,12 @@ export const Benefits = () => {
   }, [showAddModal]);
 
   return (
-    <div className="p-[3rem] font-firago">
+    <div className="p-[3rem] font-firago text-black">
       <div className="font-normal text-[1.6rem] font-feature flex justify-left item-center gap-[1.3rem] mb-[4.1rem]">
         <span>ტექსტის ცვლილება/წაშლა</span>
         <LuPencilLine className="w-[1.9rem] h-[1.9rem]" />
       </div>
-      <div className="flex gap-x-[3rem] gap-y-[3rem] flex-wrap  text-black">
+      <div className="flex gap-x-[3rem] gap-y-[3rem] flex-wrap">
         {benefits.map((benefitItem, index) => (
           <div
             key={index}
@@ -114,19 +114,22 @@ export const Benefits = () => {
             </button>
           </div>
         ))}
-      </div>
-      <div className=" w-[17.4rem] pt-[3rem]">
-        <div
-          className=" h-[18.1rem] border border-primary rounded-primary text-primary flex 
+        <div className="flex justify-center item-center w-[34.3rem] h-[29rem]">
+          <div className=" w-[17.4rem] pt-[3rem]">
+            <div
+              className=" h-[18.1rem] border border-primary rounded-primary text-primary flex 
           justify-center items-center flex-col gap-[0.4rem] cursor-pointer"
-          onClick={() => {
-            setShowAddModal(!showAddModal);
-          }}
-        >
-          <GoPlus className="w-[3.2rem] h-[3.2rem]" />
-          <span className="text-[1.2rem] font-bold">დაამატე ტექსტი</span>
+              onClick={() => {
+                setShowAddModal(!showAddModal);
+              }}
+            >
+              <GoPlus className="w-[3.2rem] h-[3.2rem]" />
+              <span className="text-[1.2rem] font-bold">დაამატე ტექსტი</span>
+            </div>
+          </div>
         </div>
       </div>
+
       {showModal && (
         <Modal setShowModal={setShowModal} handleSubmit={updateBenefit}>
           <div className="w-[34.3rem] mt-2 mb-[2rem]">

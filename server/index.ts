@@ -9,6 +9,7 @@ import serviceRouter from "./routes/service.route";
 import benefitRouter from "./routes/benefit.route";
 import faqRouter from "./routes/faq.route";
 import aboutRouter from "./routes/about.route";
+import userRouter from "./routes/user.route";
 
 const { PORT, API_SERVER } = process.env;
 
@@ -47,6 +48,7 @@ app.use(serviceRouter);
 app.use(benefitRouter);
 app.use(faqRouter);
 app.use(aboutRouter);
+app.use(userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

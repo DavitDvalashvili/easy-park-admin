@@ -114,19 +114,22 @@ export const Faq = () => {
             </button>
           </div>
         ))}
-      </div>
-      <div className=" w-[17.4rem] pt-[3rem]">
-        <div
-          className=" h-[18.1rem] border border-primary rounded-primary text-primary flex 
-          justify-center items-center flex-col gap-[0.4rem] cursor-pointer"
-          onClick={() => {
-            setShowAddModal(!showAddModal);
-          }}
-        >
-          <GoPlus className="w-[3.2rem] h-[3.2rem]" />
-          <span className="text-[1.2rem] font-bold">დაამატე ტექსტი</span>
+        <div className="w-[42.2rem] h-[40.2rem] flex justify-center items-center">
+          <div className=" w-[17.4rem] pt-[3rem]">
+            <div
+              className=" h-[18.1rem] border border-primary rounded-primary text-primary flex 
+               justify-center items-center flex-col gap-[0.4rem] cursor-pointer"
+              onClick={() => {
+                setShowAddModal(!showAddModal);
+              }}
+            >
+              <GoPlus className="w-[3.2rem] h-[3.2rem]" />
+              <span className="text-[1.2rem] font-bold">დაამატე ტექსტი</span>
+            </div>
+          </div>
         </div>
       </div>
+
       {showModal && (
         <Modal setShowModal={setShowModal} handleSubmit={updateFaq}>
           <div className="w-[34.3rem] mt-2 mb-[2rem]">
