@@ -23,7 +23,6 @@ export const About = () => {
   // Temporary states for modal form
   const [tempAbout, setTempAbout] = useState(defaultAbout);
   const [tempParagraphs, setTempParagraphs] = useState<string[]>([]);
-
   const { API_URL, language, setResponse } = useParking();
 
   const getAbout = async () => {
@@ -98,6 +97,10 @@ export const About = () => {
   useEffect(() => {
     setNewParagraph("");
   }, [showAddModal]);
+
+  useEffect(() => {
+    document.title = "About";
+  }, []);
 
   return (
     <div className="p-[3rem] pr-[10.8rem] font-firago">

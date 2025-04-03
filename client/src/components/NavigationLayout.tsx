@@ -36,14 +36,14 @@ export const NavigationLayout = () => {
 
   return (
     <div className="h-full w-[30.5rem] bg-BgSecondary pt-[2rem] pb-[3rem] font-firago flex flex-col min-w-[30.5rem]">
-      <div className="mx-auto w-[13.4rem] h-[13.4rem] rounded-full bg-white flex justify-center items-center px-4 mb-[2.8rem]">
+      <div className="mx-auto w-[10.4rem] h-[10.4rem] xl:w-[13.4rem] xl:h-[13.4rem] rounded-full bg-white flex justify-center items-center px-4 mb-[2rem]">
         <img src="/images/logo.svg" alt="logo" />
       </div>
 
       <Link to="/">
         <div
           className={`${path == "/" ? "bg-primary text-white" : "bg-none text-black"} w-full h-[4.8rem] rounded-primary  flex justify-start items-center gap-[1.2rem] 
-          text-[1.6rem] font-bold font-feature pl-[4rem] mb-8`}
+          text-[1.6rem] font-bold font-feature pl-[4rem] mb-4`}
         >
           <GoHome className="w-[2.4rem] h-[2.4rem]" />
           <span>მთავარი</span>
@@ -65,8 +65,8 @@ export const NavigationLayout = () => {
         )}
       </div>
       {showNavBar && (
-        <nav className="font-feature text-[1.6rem] uppercase text-black pl-[4rem] pt-[3rem] font-medium">
-          <ul className="flex flex-col gap-[3rem]">
+        <nav className="font-feature text-[1.6rem] uppercase text-black pl-[4rem] pt-[2rem] font-medium">
+          <ul className="flex flex-col gap-[1.5rem] xl:gap-[3rem]">
             <Link
               to="/services"
               className={`${path == "/services" ? "font-bold" : ""}`}
@@ -91,7 +91,7 @@ export const NavigationLayout = () => {
                 {showDevices ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
               </li>
               {showDevices && (
-                <div className="pt-[2rem] flex flex-col gap-[2rem] text-[1.4rem] ">
+                <div className="flex flex-col gap-[1.5rem] xl:gap-[3rem] mt-[1.5rem] xl:mt-[3rem]">
                   {deviceTypes?.map((device) => (
                     <Link
                       key={device.device_type_id}
@@ -115,7 +115,7 @@ export const NavigationLayout = () => {
       )}
       <div className="pl-[4rem] pr-[3.8rem] mt-auto text-[1.4rem] font-medium capitalize ">
         <div
-          className={`flex justify-between items-center mb-[3.9rem] cursor-pointer ${language === "En" ? "text-[#063776] opacity-[0.6]" : "text-primary"}`}
+          className={`flex justify-between items-center mb-[2rem] cursor-pointer ${language === "En" ? "text-[#063776] opacity-[0.6]" : "text-primary"}`}
           onClick={() => {
             toggleLanguage("Ge");
           }}
@@ -134,7 +134,7 @@ export const NavigationLayout = () => {
         </div>
       </div>
       <div
-        className="text-[2rem] font-bold text-[#e44] font-feature flex justify-start gap-[2.4rem]  items-center pl-[4rem] mt-[7.5rem] cursor-pointer"
+        className="text-[2rem] font-bold text-[#e44] font-feature flex justify-start gap-[2.4rem]  items-center pl-[4rem] mt-[2rem] xl:mt-[3.5rem] cursor-pointer"
         onClick={() => {
           logout();
         }}

@@ -28,6 +28,10 @@ export const Device = () => {
     getDeviceData();
   }, [language, Id]);
 
+  useEffect(() => {
+    document.title = "Device";
+  }, []);
+
   return (
     <div className="p-[3rem] pr-[9.6rem] font-firago">
       {deviceData?.devices && <Description devices={deviceData?.devices} />}

@@ -60,6 +60,10 @@ export const Services = () => {
     }
   };
 
+  useEffect(() => {
+    document.title = "Services";
+  }, []);
+
   return (
     <div className="p-[3rem] font-firago">
       <div className="font-normal text-[1.6rem] font-feature flex justify-left item-center gap-[1.3rem] mb-[4.1rem]">

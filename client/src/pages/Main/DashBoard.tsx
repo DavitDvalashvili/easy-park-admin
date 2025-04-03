@@ -3,6 +3,7 @@ import { useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { useParking } from "../../App";
+import { useEffect } from "react";
 
 const DashBoard = () => {
   const [showDevices, setShowDevices] = useState<boolean>(false);
@@ -13,10 +14,14 @@ const DashBoard = () => {
     setShowDevices(!showDevices);
   };
 
+  useEffect(() => {
+    document.title = `Easy Park - Admin Panel`;
+  }, []);
+
   return (
     <div>
       <nav>
-        <ul className="pt-[3.9rem] pl-[2.8rem] pr-[8rem] flex flex-col gap-[3rem] font-firago text-black text-[1.6rem] font-feature">
+        <ul className="pt-[3.9rem] pl-[2.8rem] pr-[8rem] flex flex-col gap-[2rem] font-firago text-black text-[1.6rem] font-feature">
           <Link
             to="/services"
             className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem] 
@@ -39,8 +44,9 @@ const DashBoard = () => {
             <li>ხშირად დასმული კითხვები</li>
           </Link>
           <div
-            className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
-          hover:font-bold hover:bg-primary hover:text-white transition duration-300"
+            className={`rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
+             hover:font-bold hover:bg-primary hover:text-white transition duration-300 cursor-pointer 
+             ${showDevices ? "bg-primary text-white" : ""}`}
           >
             <li
               className="cursor-pointer flex items-center gap-[2rem]"
@@ -49,20 +55,22 @@ const DashBoard = () => {
               <span>მოწყობილობები</span>{" "}
               {showDevices ? <MdKeyboardArrowUp /> : <MdKeyboardArrowDown />}
             </li>
-            {showDevices && (
-              <div className="pt-[2rem] flex flex-col gap-[2rem] text-[1.4rem] ">
-                {deviceTypes?.map((device) => (
-                  <Link
-                    key={device.device_type_id}
-                    to={`/device/${device.device_type_id}`}
-                    onClick={handleShowDevices}
-                  >
-                    <li className="line-clamp-1">{device.name}</li>
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
+          {showDevices && (
+            <div className="flex flex-col gap-[2rem] ">
+              {deviceTypes?.map((device) => (
+                <Link
+                  key={device.device_type_id}
+                  to={`/device/${device.device_type_id}`}
+                  onClick={handleShowDevices}
+                  className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]
+                  hover:font-bold hover:bg-primary hover:text-white transition duration-300"
+                >
+                  <li className="line-clamp-1">{device.name}</li>
+                </Link>
+              ))}
+            </div>
+          )}
           <Link
             to="/about"
             className="rounded-secondary border border-primary height-[5rem] py-[1.5rem] pl-[2.6rem]

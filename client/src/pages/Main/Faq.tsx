@@ -37,6 +37,10 @@ export const Faq = () => {
     getFaqs();
   }, [language]);
 
+  useEffect(() => {
+    document.title = `F.A.Q`;
+  }, []);
+
   const updateFaq = async () => {
     if (faq.question && faq.answer) {
       await axios
