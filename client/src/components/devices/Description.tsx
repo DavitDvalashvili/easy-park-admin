@@ -6,7 +6,7 @@ import { Modal } from "../Modal";
 import axios from "axios";
 
 type devices = {
-  devices: device[];
+  devices: device[] | undefined;
 };
 
 const defaultDevice = {

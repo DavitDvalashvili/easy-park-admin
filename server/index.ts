@@ -10,12 +10,15 @@ import benefitRouter from "./routes/benefit.route";
 import faqRouter from "./routes/faq.route";
 import aboutRouter from "./routes/about.route";
 import userRouter from "./routes/user.route";
+import path from "path";
 
 const { PORT, API_SERVER } = process.env;
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(
   cors({

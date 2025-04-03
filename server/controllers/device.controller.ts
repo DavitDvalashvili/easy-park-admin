@@ -7,6 +7,8 @@ import {
   image,
   ResponseStatus,
 } from "../@types/globals";
+import path from "path";
+import fs from "fs";
 
 export const getDeviceType = async (req: Request, res: Response) => {
   let conn;
@@ -267,55 +269,100 @@ export const deleteFeature = async (req: Request, res: Response) => {
   }
 };
 
-// export const addImage = async (req: Request, res: Response) => {
-//   let conn;
+export const addImage = async (req: Request, res: Response) => {
+  let conn;
 
-//   // const deviceTypeId = req.query.deviceTypeId as string | number;
-//   // const lan = req.query.lan as string | number;
-//   // const { feature } = req.body as feature;
+  const file = req.file;
+  const Id = req.query.id as String | number;
 
-//   let response: ResponseStatus;
+  let response: ResponseStatus;
 
-//   try {
-//     conn = await createConnection();
+  try {
+    const fileName = `${file?.filename}`;
 
-//     const [language] = await conn.query(
-//       `SELECT language_id FROM languages WHERE language = ?`,
-//       [lan]
-//     );
+    conn = await createConnection();
 
-//     let query = `INSERT INTO features (feature, language_id, device_type_id)
-//     VALUE (?, ?, ?)
-//     `;
+    if (fileName) {
+      const result = await conn.query(
+        `INSERT INTO images (image_url, device_type_id) VALUES (?, ?)`,
+        [fileName, Id]
+      );
 
-//     const result: any = await conn.query(query, [
-//       feature,
-//       language.language_id,
-//       deviceTypeId,
-//     ]);
+      if (result.affectedRows > 0) {
+        response = {
+          status: "inserted",
+          message: "ფოტო წარმატებით დაემატა",
+          insert_id: Number(result.insertId),
+        };
+        res.send(response);
+      } else {
+        response = {
+          status: "insert_error",
+          message: "ფოტო ვერ დაემატა",
+        };
+        res.send(response);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  } finally {
+    if (conn) conn.release();
+  }
+};
 
-//     if (result.affectedRows > 0) {
-//       response = {
-//         status: "inserted",
-//         message: "ინფორმაცია წარმატებით დაემატა",
-//         insert_id: Number(result.insertId),
-//       };
-//       res.send(response);
-//     } else {
-//       response = {
-//         status: "insert_error",
-//         message: "ინფორმაცია ვერ დაემატა",
-//       };
-//       res.send(response);
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     response = {
-//       status: "insert_error",
-//       message: "ინფორმაცია ვერ დაემატა",
-//     };
-//     res.send(response);
-//   } finally {
-//     if (conn) conn.release();
-//   }
-// };
+export const deleteImage = async (req: Request, res: Response) => {
+  let conn;
+
+  const imageId = req.params.imageId as string | number;
+
+  let response: ResponseStatus;
+
+  try {
+    conn = await createConnection();
+
+    const [image] = await conn.query(
+      `SELECT image_url FROM images WHERE image_id = ?;`,
+      [imageId]
+    );
+
+    if (!image) {
+      res.status(404).send({ message: "Image not found" });
+      return;
+    }
+
+    const fullImagePath = path.normalize(
+      path.join(__dirname, "..", "images", image.image_url)
+    );
+
+    const result = await conn.query(
+      `DELETE FROM images i
+         WHERE i.image_id = ?`,
+      [imageId]
+    );
+
+    if (result.affectedRows > 0) {
+      fs.unlink(fullImagePath, (err) => {
+        if (err) {
+          response = {
+            status: "delete_error",
+            message: "ფოტო ვერ წაიშალა",
+          };
+          res.send(response);
+          console.log(err);
+          return;
+        }
+        response = {
+          status: "deleted",
+          message: "ფოტო წარმატებით წაიშალა",
+        };
+        res.send(response);
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: "server error" });
+  } finally {
+    if (conn) conn.end();
+  }
+};

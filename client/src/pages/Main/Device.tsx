@@ -6,16 +6,10 @@ import { useParking } from "../../App";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const defaultData: deviceData = {
-  devices: [{ deviceId: "", name: "", description: "", languageId: "" }],
-  features: [{ featureId: "", feature: "", languageId: "" }],
-  images: [{ imageId: "", imageUrl: "" }],
-};
-
 export const Device = () => {
   const { API_URL, language } = useParking();
   const Id = useParams().id as string | number;
-  const [deviceData, setDeviceData] = useState<deviceData>(defaultData);
+  const [deviceData, setDeviceData] = useState<deviceData | null>(null);
 
   const getDeviceData = async () => {
     await axios
@@ -36,9 +30,9 @@ export const Device = () => {
 
   return (
     <div className="p-[3rem] pr-[9.6rem] font-firago">
-      <Description devices={deviceData.devices} />
-      <Features Features={deviceData.features} />
-      <ImagesBox Images={deviceData.images} />
+      {deviceData?.devices && <Description devices={deviceData?.devices} />}
+      {deviceData?.features && <Features Features={deviceData?.features} />}
+      {deviceData?.images && <ImagesBox Images={deviceData?.images} />}
     </div>
   );
 };

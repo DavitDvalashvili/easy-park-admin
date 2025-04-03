@@ -3,29 +3,33 @@ import { GoPlus } from "react-icons/go";
 import { LuPencilLine } from "react-icons/lu";
 import { Modal } from "../Modal";
 import axios from "axios";
-import { useParking, UseParking } from "../../App";
+import { useParking } from "../../App";
+import { useParams } from "react-router-dom";
 
 type Image = {
   imageUrl: string;
+  imageId: string | number;
 };
 
 type ImagesProps = {
-  Images: Image[] | undefined;
+  Images: Image[];
 };
 
 const ImagesBox = ({ Images }: ImagesProps) => {
   const [images, setImages] = useState<Image[]>([]);
+  const [currentImage, setCurrentImage] = useState<Image | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [file, setFile] = useState<File | undefined>(undefined);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
-  const { API_URL } = useParking();
+  const id = useParams().id as string | number;
+  const { API_URL, setResponse } = useParking();
 
   useEffect(() => {
-    if (Images?.length) {
-      setImages(Images);
-    }
+    setPreviewUrl(null);
+    setImages(Images);
   }, [Images]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,9 +47,18 @@ const ImagesBox = ({ Images }: ImagesProps) => {
       formData.append("image", file);
 
       await axios
-        .post(`${API_URL}/addImage`, formData)
+        .post(`${API_URL}/addImage?id=${id}`, formData)
         .then((res) => {
-          console.log(res);
+          if (res.data.status === "inserted") {
+            if (previewUrl) {
+              setImages([
+                ...images,
+                { imageUrl: previewUrl, imageId: res.data.insert_id },
+              ]);
+            }
+          }
+          setResponse(res.data);
+          setShowModal(false);
         })
         .catch((err) => {
           console.log(err);
@@ -59,6 +72,29 @@ const ImagesBox = ({ Images }: ImagesProps) => {
     }
   }, [showModal]);
 
+  const deleteImage = async () => {
+    await axios
+      .delete(`${API_URL}/deleteImage/${currentImage?.imageId}`)
+      .then((res) => {
+        if (res.data.status == "deleted") {
+          if (images.length === 1) {
+            setImages([
+              ...images.filter((i) => i.imageId !== currentImage?.imageId),
+            ]);
+          } else {
+            setImages([
+              ...images.filter((i) => i.imageId !== currentImage?.imageId),
+            ]);
+          }
+        }
+        setShowDeleteModal(false);
+        setResponse(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="pt-12 font-firago">
       {/* Title */}
@@ -69,24 +105,35 @@ const ImagesBox = ({ Images }: ImagesProps) => {
 
       {/* Image List */}
       <div className="flex flex-wrap gap-6 text-black">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className="w-[28.5rem] h-[23.5rem] border border-primary rounded-primary p-4 flex flex-col"
-          >
-            <span className="text-[2rem] uppercase font-bold">
-              N {index + 1}
-            </span>
-            <img
-              src={image.imageUrl}
-              alt={`Uploaded ${index + 1}`}
-              className="h-[13.3rem] mb-4"
-            />
-            <button className="mt-auto w-[13.2rem] h-[3.5rem] text-[1.3rem] font-bold text-primary border border-primary rounded-secondary mx-auto flex items-center justify-center mb-2 hover:bg-primary hover:text-white transition">
-              შეცვლა
-            </button>
-          </div>
-        ))}
+        {images.length > 0 &&
+          images?.map((image, index) => (
+            <div
+              key={index}
+              className="w-[28.5rem] h-[23.5rem] border border-primary rounded-primary p-4 flex flex-col"
+            >
+              <span className="text-[2rem] uppercase font-bold">
+                N {index + 1}
+              </span>
+              <img
+                src={
+                  image?.imageUrl?.startsWith("blob:")
+                    ? image?.imageUrl
+                    : `${API_URL}/images/${image.imageUrl}`
+                }
+                alt={`Uploaded ${index + 1}`}
+                className="h-[13.3rem] mb-4"
+              />
+              <button
+                className="mt-auto w-[13.2rem] h-[3.5rem] text-[1.3rem] font-bold text-errorRed border border-errorRed rounded-secondary mx-auto flex items-center justify-center mb-2 hover:bg-errorRed hover:text-white transition"
+                onClick={() => {
+                  setShowDeleteModal(true);
+                  setCurrentImage(image);
+                }}
+              >
+                წაშლა
+              </button>
+            </div>
+          ))}
         <div className="w-[28.5rem] h-[23.5rem] ">
           <div className="w-[17.4rem] pt-12">
             <div
@@ -110,6 +157,28 @@ const ImagesBox = ({ Images }: ImagesProps) => {
         <Modal setShowModal={setShowModal} handleSubmit={addImage}>
           <div className="w-[34.3rem] mt-2 mb-8">
             <img src={previewUrl} alt="Preview" className="w-full" />
+          </div>
+        </Modal>
+      )}
+      {/* Delete Modal Preview Before Upload */}
+      {showDeleteModal && (
+        <Modal setShowModal={setShowDeleteModal} handleSubmit={deleteImage}>
+          <div
+            className="text-[1.3rem] font-medium  border-[0.05rem] border-primary rounded-primary 
+            p-[0.8rem] text-center mb-8"
+          >
+            <span>ნამდვილად გსურთ ფოტოს წაშლა?</span>
+            <div className="w-[34.3rem] mt-2 ">
+              <img
+                src={
+                  currentImage?.imageUrl?.startsWith("blob:")
+                    ? currentImage?.imageUrl
+                    : `${API_URL}/images/${currentImage?.imageUrl}`
+                }
+                alt="Preview"
+                className="w-full"
+              />
+            </div>
           </div>
         </Modal>
       )}
