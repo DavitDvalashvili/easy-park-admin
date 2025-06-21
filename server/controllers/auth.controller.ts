@@ -17,9 +17,7 @@ declare module "express-session" {
 
 export const login = async (req: Request, res: Response) => {
   let conn;
-
   const { userName, password } = req.body;
-
   try {
     conn = await createConnection();
 
@@ -36,29 +34,19 @@ export const login = async (req: Request, res: Response) => {
           };
           req.session.Auth = userData;
           req.session.save(() => {
-            res.send(userData);
+            res.send({ status: "success", userData });
           });
         } else {
-          res.status(404).send({ message: "incorrect password" });
+          res.send({ status: "error", message: "პაროლი არასწორია" });
         }
       });
     } else {
-      res.status(404).send({ message: "user not found" });
+      res.send({ status: "error", message: "იუზერის სახელი არასწორია" });
     }
-  } catch (err) {
-    console.log("login error", err);
-    res.status(500).send({ message: "server error" });
+  } catch (err: string | unknown) {
+    console.log("Error in login", err?.toString());
   } finally {
     if (conn) conn.release();
-  }
-};
-
-export const checkSession = async (req: Request, res: Response) => {
-  if (req.session.Auth) {
-    console.log(req.session.Auth);
-    res.send(req.session.Auth);
-  } else {
-    res.status(401).send({ message: "you are not authenticated" });
   }
 };
 
@@ -66,9 +54,17 @@ export const logout = async (req: Request, res: Response) => {
   req.session.destroy((err) => {
     if (err) {
       console.log(err);
-      res.status(500).send({ message: "server error" });
+      res.send(false);
     } else {
-      res.send({ message: "logged out successfully" });
+      res.send(true);
     }
   });
+};
+
+export const checkSession = async (req: Request, res: Response) => {
+  if (req.session.Auth) {
+    res.send(req.session.Auth);
+  } else {
+    res.send(false);
+  }
 };

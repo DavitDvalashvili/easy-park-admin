@@ -10,6 +10,8 @@ import {
 import path from "path";
 import fs from "fs";
 
+const { API_SERVER } = process.env;
+
 export const getDeviceType = async (req: Request, res: Response) => {
   let conn;
 
@@ -278,14 +280,14 @@ export const addImage = async (req: Request, res: Response) => {
   let response: ResponseStatus;
 
   try {
-    const fileName = `${file?.filename}`;
+    const fullFileName = `${API_SERVER}/images/${file?.filename}`;
 
     conn = await createConnection();
 
-    if (fileName) {
+    if (fullFileName) {
       const result = await conn.query(
         `INSERT INTO images (image_url, device_type_id) VALUES (?, ?)`,
-        [fileName, Id]
+        [fullFileName, Id]
       );
 
       if (result.affectedRows > 0) {
@@ -332,7 +334,7 @@ export const deleteImage = async (req: Request, res: Response) => {
     }
 
     const fullImagePath = path.normalize(
-      path.join(__dirname, "..", "images", image.image_url)
+      path.join(__dirname, "..", "images", image.image_url.split("/").pop())
     );
 
     const result = await conn.query(

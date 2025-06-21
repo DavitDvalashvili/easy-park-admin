@@ -36,6 +36,7 @@ export type UseParking = {
   deviceTypes: deviceType[] | null;
   setDeviceTypes: (deviceTypes: deviceType[]) => void;
   getDeviceTypes: VoidFunction;
+  checkSession: VoidFunction;
 };
 
 export const useParking = create<UseParking>((set, get) => ({
@@ -59,9 +60,27 @@ export const useParking = create<UseParking>((set, get) => ({
       console.error(err);
     }
   },
+  checkSession: async () => {
+    const { API_URL, setUserData } = get();
+    await axios
+      .get(API_URL + "/checkSession")
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data) {
+            setUserData(res.data);
+          } else {
+            setUserData(null);
+          }
+        }
+      })
+      .catch((err) => {
+        setUserData(err.message);
+      });
+  },
 }));
 
 const App = () => {
+  axios.defaults.withCredentials = true;
   return (
     <Router>
       <Routes>

@@ -22,7 +22,7 @@ const mysqlPoolConfig = {
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  authPlugins: { mysql_native_password: () => () => Buffer.from("") },
+  //authPlugins: { mysql_native_password: () => () => Buffer.from("") },
 };
 
 // MariaDB pool for queries

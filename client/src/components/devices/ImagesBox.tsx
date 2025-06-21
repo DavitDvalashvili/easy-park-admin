@@ -115,11 +115,7 @@ const ImagesBox = ({ Images }: ImagesProps) => {
                 N {index + 1}
               </span>
               <img
-                src={
-                  image?.imageUrl?.startsWith("blob:")
-                    ? image?.imageUrl
-                    : `${API_URL}/images/${image.imageUrl}`
-                }
+                src={`${image.imageUrl}`}
                 alt={`Uploaded ${index + 1}`}
                 className="h-[13.3rem] mb-4"
               />
@@ -155,8 +151,8 @@ const ImagesBox = ({ Images }: ImagesProps) => {
       {/* Modal Preview Before Upload */}
       {showModal && previewUrl && (
         <Modal setShowModal={setShowModal} handleSubmit={addImage}>
-          <div className="w-[34.3rem] mt-2 mb-8">
-            <img src={previewUrl} alt="Preview" className="w-full" />
+          <div className="w-[34.3rem] mt-2 mb-8 h-[34.3rem]">
+            <img src={previewUrl} alt="Preview" className="w-full h-full" />
           </div>
         </Modal>
       )}
@@ -168,15 +164,11 @@ const ImagesBox = ({ Images }: ImagesProps) => {
             p-[0.8rem] text-center mb-8"
           >
             <span>ნამდვილად გსურთ ფოტოს წაშლა?</span>
-            <div className="w-[34.3rem] mt-2 ">
+            <div className="w-[34.3rem] mt-2 h-[34.3rem]">
               <img
-                src={
-                  currentImage?.imageUrl?.startsWith("blob:")
-                    ? currentImage?.imageUrl
-                    : `${API_URL}/images/${currentImage?.imageUrl}`
-                }
+                src={`${currentImage?.imageUrl}`}
                 alt="Preview"
-                className="w-full"
+                className="w-full h-full"
               />
             </div>
           </div>

@@ -19,13 +19,14 @@ export const NavigationLayout = () => {
 
   const logout = async (): Promise<void> => {
     await axios
-      .get(`${API_URL}/logout`)
+      .post(`${API_URL}/logout`)
       .then((res) => {
         if (res.status === 200) {
+          console.log(res.status);
           Navigate("/login");
         }
       })
-      .then((err) => {
+      .catch((err) => {
         console.log(err);
       });
   };

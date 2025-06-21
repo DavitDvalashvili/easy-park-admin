@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect, FormEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEyeOffOutline } from "react-icons/io5";
 import axios from "axios";
@@ -11,10 +11,11 @@ type authInfoType = {
 };
 
 const Login = () => {
-  const { API_URL, userData, setUserData } = useParking();
+  const { API_URL, setUserData, userData } = useParking();
   const navigate: NavigateFunction = useNavigate();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
-  let [authInfo, setAuthInfo] = useState<authInfoType>({
+  const [authInfo, setAuthInfo] = useState<authInfoType>({
     userName: "",
     password: "",
   });
@@ -26,56 +27,41 @@ const Login = () => {
   };
 
   const login = async (): Promise<void> => {
-    if (authInfo.userName && authInfo.password) {
-      await axios
-        .post(`${API_URL}/login`, authInfo, { withCredentials: true })
-        .then((res) => {
-          if (res.status === 200) {
-            setUserData(res.data);
-            navigate("/");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    if (!authInfo.userName || !authInfo.password) {
+      setErrorMessage("გთხოვთ შეავსოთ ყველა ველი");
+      return;
     }
-  };
-
-  const checkSession = async () => {
     await axios
-      .get(`${API_URL}/checkSession`, { withCredentials: true })
+      .post(`${API_URL}/login`, authInfo, { withCredentials: true })
       .then((res) => {
-        if (res.status == 200) {
-          if (res.data) setUserData(res.data);
-          else setUserData(null);
+        if (res.data.status === "success") {
+          setUserData(res.data.userData);
+          navigate("/");
+        } else {
+          setErrorMessage(res.data.message);
         }
-        console.log(res.data);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(error);
       });
   };
 
   useEffect(() => {
     document.title = "ავტორიზაცია";
-    checkSession();
+    if (userData && userData !== "Loading") navigate("/");
   }, []);
 
-  useEffect(() => {
-    //if (userData) navigate("/");
-  }, [userData]);
-
   return (
-    <div className="h-screen p-[6rem] flex flex-col gap-[10rem] justify-center items-center font-firago">
-      <div className="px-[9rem] py-[7.8rem] shadow-customShadow rounded-primary bg-white">
-        <h2 className="text-[4.4rem] font-bold text-primary font-feature pb-8 text-center">
+    <div className="h-screen p-[3rem] flex flex-col gap-[5rem] justify-center items-center font-firago">
+      <div className="px-[3rem] py-[3.8rem] shadow-customShadow rounded-primary bg-white">
+        <h2 className="text-[2.4rem] font-bold text-primary font-feature pb-8 text-center">
           მოგესალმებით
         </h2>
-        <h5 className="text-[2.4rem] font-bold uppercase font-feature text-primary pb-[5.6rem] text-center">
+        <h5 className="text-[2.4rem] font-bold uppercase font-feature text-primary pb-[2.6rem] text-center">
           EASY PARK-ის ადმინ პანელში
         </h5>
-        <form className="flex flex-col gap-8">
-          <div className="w-[56rem] h-[6rem] border border-primary rounded-primary px-[2.6rem] py-[1.5rem] flex justify-center items-center">
+        <form className="flex flex-col gap-8 ">
+          <div className="w-[46rem] h-[6rem] border border-primary rounded-primary px-[2.6rem] py-[1.5rem] flex justify-center items-center">
             <input
               type="text"
               name="userName"
@@ -86,7 +72,7 @@ const Login = () => {
               onChange={handleChangeAuthInfo}
             />
           </div>
-          <div className="w-[56rem] h-[6rem] border border-primary rounded-primary px-[2.6rem] py-[1.5rem] flex justify-center items-center">
+          <div className="w-[46rem] h-[6rem] border border-primary rounded-primary px-[2.6rem] py-[1.5rem] flex justify-center items-center">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -111,13 +97,21 @@ const Login = () => {
           </div>
           <button
             type="button"
-            className="text-[1.8rem] bg-primary rounded-primary text-center font-bold font-feature h-[6rem] w-[56rem] text-white"
+            className="text-[1.8rem] bg-primary rounded-primary text-center font-bold font-feature h-[6rem] w-[46rem] text-white"
             onClick={() => {
               login();
             }}
           >
             ავტორიზაცია
           </button>
+          {errorMessage && (
+            <div>
+              <div className="border-errorRed rounded-primary text-[1.4rem] weight-normal p-[1.2rem] flex justify-center gap-[1.5rem] border-[0.05rem] border-solid">
+                <span> {errorMessage}</span>
+                <img src="/images/error.svg" alt="error" />
+              </div>
+            </div>
+          )}
         </form>
       </div>
       <div>
