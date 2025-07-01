@@ -50,7 +50,7 @@ export const useParking = create<UseParking>((set, get) => ({
   deviceTypes: null,
   setDeviceTypes: (deviceTypes: deviceType[]) => set({ deviceTypes }),
   getDeviceTypes: async () => {
-    const { API_URL, setDeviceTypes } = get();
+    const { API_URL, setDeviceTypes, setUserData } = get();
     try {
       const res = await axios.get(`${API_URL}/deviceType`);
       if (res.status === 200) {
@@ -58,6 +58,7 @@ export const useParking = create<UseParking>((set, get) => ({
       }
     } catch (err) {
       console.error(err);
+      setUserData("Network Error");
     }
   },
   checkSession: async () => {

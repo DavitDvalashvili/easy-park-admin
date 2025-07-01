@@ -280,7 +280,7 @@ export const addImage = async (req: Request, res: Response) => {
   let response: ResponseStatus;
 
   try {
-    const fullFileName = `${API_SERVER}/images/${file?.filename}`;
+    const fullFileName = `/images/${file?.filename}`;
 
     conn = await createConnection();
 

@@ -29,8 +29,6 @@ const Description = ({ devices }: devices) => {
 
   const { API_URL, setResponse } = useParking();
 
-  console.log(devices);
-
   useEffect(() => {
     if (devices?.[0]?.description) {
       setDescription(JSON.parse(devices[0].description));

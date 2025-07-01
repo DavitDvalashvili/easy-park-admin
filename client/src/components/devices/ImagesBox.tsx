@@ -32,6 +32,8 @@ const ImagesBox = ({ Images }: ImagesProps) => {
     setImages(Images);
   }, [Images]);
 
+  console.log(currentImage);
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     setFile(selectedFile);
@@ -115,7 +117,11 @@ const ImagesBox = ({ Images }: ImagesProps) => {
                 N {index + 1}
               </span>
               <img
-                src={`${image.imageUrl}`}
+                src={
+                  image.imageUrl.includes("blob:")
+                    ? image.imageUrl
+                    : `${API_URL}${image.imageUrl}`
+                }
                 alt={`Uploaded ${index + 1}`}
                 className="h-[13.3rem] mb-4"
               />
@@ -166,7 +172,11 @@ const ImagesBox = ({ Images }: ImagesProps) => {
             <span>ნამდვილად გსურთ ფოტოს წაშლა?</span>
             <div className="w-[34.3rem] mt-2 h-[34.3rem]">
               <img
-                src={`${currentImage?.imageUrl}`}
+                src={
+                  currentImage?.imageUrl?.includes("blob:")
+                    ? currentImage.imageUrl
+                    : `${API_URL}${currentImage?.imageUrl}`
+                }
                 alt="Preview"
                 className="w-full h-full"
               />

@@ -6,6 +6,7 @@ import { Notification } from "../../components/Notification";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../Loading";
+import ServerError from "../ServerError";
 
 const Main = () => {
   const { response, userData, checkSession, getDeviceTypes } = useParking();
@@ -28,6 +29,7 @@ const Main = () => {
   }, []);
 
   if (userData === "Loading") return <Loading />;
+  if (userData === "Network Error") return <ServerError />;
 
   return (
     <div className="w-screen h-screen flex justify-start items-start max-w-[224rem] mx-auto relative ">
